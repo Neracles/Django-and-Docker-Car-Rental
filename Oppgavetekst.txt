@@ -1,0 +1,21 @@
+Following functionalities must be implemented.
+- Create, Read, Update and Delete ‘Cars' with basic information e.g., make, model, year, lo-
+cation, status (i.e., available, booked, rented, damaged)
+- Create, Read, Update and Delete ‘Customer’ with basic information e.g., name, age, ad-
+dress.
+- Create, Read, Update and Delete ‘Employee’ with basic information e.g., name, address,
+branch.
+- Implement an endpoint ‘order-car’ where a customer-id, car-id is passed as parameters.
+The system must check that the customer with customer-id has not booked other cars. The
+system changes the status of the car with car-id from ‘available’ to ‘booked’.
+- Implement an endpoint ‘cancel-order-car’ where a customer-id, car-id is passed as para-
+meters. The system must check that the customer with customer-id has booked for the car.
+If the customer has booked the car, the car becomes available.
+- Implement an endpoint ‘rent-car’ where a customer-id, car-id is passed as parameters. The
+system must check that the customer with customer-id has a booking for the car. The car’s
+status is changed from ‘booked’ to ‘rented’.
+- Implement an endpoint ‘return-car’ where a customer-id, car-id is passed as parameters.
+Car’s status (e.g., ok or damaged) during the return will also be passed. The system must
+check that the customer with customer-id has rented the car. The car’s status is changed
+from ‘booked’ to ‘available’ or ‘damaged’.
+- Use postman to check the funcEonality of your implementaEon.
