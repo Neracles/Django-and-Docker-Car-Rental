@@ -1,3 +1,10 @@
+In this exercise you will have to implement WebAPIs for a car rental company. In this exercise
+you may consider that customers rent cars for non-deterministic time. For simplicity you do
+not need to consider the date/time of rental. For example, if a car #1 is available, it can be
+rented to a customer John. If car #1 is booked for John, it cannot be booked by any other
+customer. Again, if John has booked a car, he cannot book any other car. If John returns car
+#1, he is allowed to rent other cars.
+
 Following functionalities must be implemented.
 - Create, Read, Update and Delete ‘Cars' with basic information e.g., make, model, year, lo-
 cation, status (i.e., available, booked, rented, damaged)
@@ -18,4 +25,4 @@ status is changed from ‘booked’ to ‘rented’.
 Car’s status (e.g., ok or damaged) during the return will also be passed. The system must
 check that the customer with customer-id has rented the car. The car’s status is changed
 from ‘booked’ to ‘available’ or ‘damaged’.
-- Use postman to check the funcEonality of your implementaEon.
+- Use postman to check the functionality of your implementation.
