@@ -15,10 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from .views import get_cars
-from .views import save_car
-from .views import update_car
-from .views import delete_car
+from .Views.carViews import get_cars
+from .Views.carViews import save_car
+from .Views.carViews import update_car
+from .Views.carViews import delete_car
 
 urlpatterns = [
     path("admin/", admin.site.urls),
