@@ -1,4 +1,4 @@
-from models import Customer
+from ..models import Customer
 from rest_framework.response import Response
 from serializers import CustomerSerializer
 from rest_framework import status

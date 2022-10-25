@@ -2,25 +2,11 @@ from django.db import models
 from django.contrib import admin
 
 class Car(models.Model):
-    
-    #https://docs.djangoproject.com/en/4.1/ref/models/fields/#field-choices-enum-types
-    # class CarStatusEnum(models.TextChoices):
-    #     AVAILABLE = 'Available'
-    #     BOOKED = 'Booked'
-    #     RENTED = 'Rented'
-    #     DAMAGED = 'Damaged'
-    
     make = models.CharField(max_length=50)
     carmodel = models.CharField(max_length=50)
     year = models.IntegerField()
     location = models.CharField(max_length=50)
     status = models.CharField(max_length=50)
-    # status = models.CharField(
-    #     max_length = 11,
-    #     choices=CarStatusEnum.choices(),
-    #     default=CarStatusEnum.AVAILABLE,
-    # )
-
     def __str__(self): 
         return self.make + ' ' + self.carmodel
 
