@@ -20,7 +20,8 @@ class Car(models.Model):
         return
 
     def delete(self):
-        return
+        car = Car.objects.get(id= self)
+        return car.delete()
     
 class Customer(models.Model):
     name = models.CharField(max_length=50)
