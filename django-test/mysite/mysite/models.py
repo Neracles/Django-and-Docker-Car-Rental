@@ -19,8 +19,8 @@ class Car(models.Model):
     def update(self):
         return
 
-    def delete(self):
-        car = Car.objects.get(id= self)
+    def delete(id):
+        car = Car.objects.get(id= id)
         return car.delete()
     
 class Customer(models.Model):

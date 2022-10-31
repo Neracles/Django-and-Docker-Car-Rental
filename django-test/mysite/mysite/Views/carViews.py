@@ -37,7 +37,7 @@ def delete_car(request, id):
     try:
         theCar = Car.objects.get(pk=id)
     except Car.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)    
+        return Response(status=status.HTTP_404_NOT_FOUND)   
     theCar.delete(id)
     return Response(status=status.HTTP_204_NO_CONTENT)
 
