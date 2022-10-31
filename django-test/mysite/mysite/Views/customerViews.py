@@ -1,6 +1,6 @@
 from ..models import Customer
 from rest_framework.response import Response
-from serializers import CustomerSerializer
+from ..serializers import CustomerSerializer
 from rest_framework import status
 from django.http import JsonResponse
 from rest_framework.decorators import api_view

@@ -1,6 +1,6 @@
 from ..models import Employee
 from rest_framework.response import Response
-from serializers import EmployeeSerializer
+from ..serializers import EmployeeSerializer
 from rest_framework import status
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
