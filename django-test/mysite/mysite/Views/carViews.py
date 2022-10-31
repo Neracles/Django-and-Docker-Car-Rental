@@ -4,6 +4,7 @@ from ..serializers import CarSerializer
 from rest_framework import status
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
+from django.shortcuts import render,redirect
 
 @api_view(['GET'])
 def get_cars(request):
@@ -12,12 +13,14 @@ def get_cars(request):
     print(serializer.data)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
-@api_view(['POST'])
-def save_car(request):
+@api_view(['GET', 'POST'])
+def create_car(request):
     serializer = CarSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    else:
+        return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT'])
 def update_car(request, id):

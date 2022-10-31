@@ -22,7 +22,7 @@ from .Views.employeeViews import *
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("cars/", get_cars),
-    path("save_car/", save_car),
+    path("create_car/", create_car),
     path("update_car/<int:id>", update_car),
     path("delete_car/<int:id>", delete_car),
     path("order_car/<int:id>", order_car),
