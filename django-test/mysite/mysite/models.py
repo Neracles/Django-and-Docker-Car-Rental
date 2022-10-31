@@ -9,19 +9,6 @@ class Car(models.Model):
     status = models.CharField(max_length=50)
     def __str__(self): 
         return self.make + ' ' + self.carmodel
-
-    def create(self):
-        return
-
-    def read(self):
-        return
-
-    def update(self):
-        return
-
-    def delete(id):
-        car = Car.objects.get(id= id)
-        return car.delete()
     
 class Customer(models.Model):
     name = models.CharField(max_length=50)

@@ -1,3 +1,5 @@
+python manage.py 
+
 In this exercise you will have to implement WebAPIs for a car rental company. In this exercise
 you may consider that customers rent cars for non-deterministic time. For simplicity you do
 not need to consider the date/time of rental. For example, if a car #1 is available, it can be

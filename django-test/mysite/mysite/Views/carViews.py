@@ -32,13 +32,13 @@ def update_car(request, id):
     else:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['DELETE'])
+@api_view(['GET', 'POST'])
 def delete_car(request, id):
     try:
         theCar = Car.objects.get(pk=id)
     except Car.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)   
-    theCar.delete(id)
+    theCar.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
 
 @api_view(['GET'])
