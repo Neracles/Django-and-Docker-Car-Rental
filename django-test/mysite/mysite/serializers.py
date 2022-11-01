@@ -6,7 +6,7 @@ from .models import Customer
 class CarSerializer(serializers.ModelSerializer):
     class Meta:
         model = Car
-        fields = ['id', 'make', 'carmodel', 'year', 'location', 'status']
+        fields = ['id', 'make', 'carmodel', 'year', 'location', 'availability']
         
 class EmployeeSerializer(serializers.ModelSerializer):
     class Meta:

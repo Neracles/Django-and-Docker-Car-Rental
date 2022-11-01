@@ -12,7 +12,7 @@ def get_employees(request):
     print(serializer.data)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
-@api_view(['POST'])
+@api_view(['GET', 'PUT'])
 def save_employee(request):
     serializer = EmployeeSerializer(data=request.data)
     if serializer.is_valid():

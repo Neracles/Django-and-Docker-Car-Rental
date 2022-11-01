@@ -44,10 +44,15 @@ def delete_car(request, id):
     theCar.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
 
-@api_view(['GET'])
+@api_view(['PUT'])
 def order_car(request, id):
     try:
         theCar = Car.objects.get(pk=id)
     except Car.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)    
-    
+    if theCar.availability == True:
+        serializer = CarSerializer(theCar, data=request.data)
+        serializer.update(theCar, {"availability": False})
+    else:
+        return Response(status=status.HTTP_400_BAD_REQUEST)  
+    return Response(status=status.HTTP_204_NO_CONTENT)

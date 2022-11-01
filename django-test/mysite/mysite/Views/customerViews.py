@@ -10,7 +10,8 @@ def get_customers(request):
     customers = Customer.objects.all()
     serializer = CustomerSerializer(customers, many=True)
     print(serializer.data)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    if serializer.is_valid():
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def save_customer(request):

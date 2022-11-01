@@ -23,18 +23,6 @@ class Car(models.Model):
 
     def __str__(self): 
         return self.make + ' ' + self.carmodel
-
-    def create(self):
-        return self.make
-
-    def read(self):
-        return
-
-    def update(self):
-        return
-
-    def delete(self):
-        return
     
 class Customer(models.Model):
     name = models.CharField(max_length=50)
