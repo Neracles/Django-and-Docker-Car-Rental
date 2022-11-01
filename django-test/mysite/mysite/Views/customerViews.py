@@ -13,12 +13,14 @@ def get_customers(request):
     if serializer.is_valid():
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-@api_view(['POST'])
-def save_customer(request):
+@api_view(['GET','POST'])
+def create_customer(request):
     serializer = CustomerSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    else:
+        return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT'])
 def update_customer(request, id):
