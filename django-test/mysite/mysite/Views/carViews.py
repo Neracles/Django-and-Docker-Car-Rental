@@ -17,7 +17,9 @@ def get_cars(request):
 def create_car(request):
     serializer = CarSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save()
+        # carStatus = serializer.data.get("car_status")
+        # if carStatus == "available":
+        #     serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     else:
         return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
@@ -44,15 +46,15 @@ def delete_car(request, id):
     theCar.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
 
-@api_view(['PUT'])
+@api_view(['GET','PUT'])
 def order_car(request, id):
     try:
         theCar = Car.objects.get(pk=id)
     except Car.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)    
-    if theCar.availability == True:
+    if theCar.car_status == "available":
         serializer = CarSerializer(theCar, data=request.data)
-        serializer.update(theCar, {"availability": False})
+        serializer.update(theCar, {"car_status": "booked"})
     else:
         return Response(status=status.HTTP_400_BAD_REQUEST)  
     return Response(status=status.HTTP_204_NO_CONTENT)
