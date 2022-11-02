@@ -17,9 +17,9 @@ class EmployeeSerializer(serializers.ModelSerializer):
 class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
-        fields = ['id','name', 'age', 'address', 'cars']
+        fields = ['id','name', 'age', 'address']
         
 class BookingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Booking
-        fields = ['id', 'customer', 'car', 'booking_date', 'return_date', 'booking_status']
+        fields = ['id', 'customer', 'car', 'booking_status']

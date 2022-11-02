@@ -18,6 +18,7 @@ from django.urls import path
 from .Views.carViews import *
 from .Views.customerViews import *
 from .Views.employeeViews import *
+from .Views.bookingViews import *
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -25,13 +26,17 @@ urlpatterns = [
     path("create_car/", create_car),
     path("update_car/<int:id>", update_car),
     path("delete_car/<int:id>", delete_car),
-    path("order_car/car_id/<int:carid>/customer_id/<int:custid>", order_car),
     path("customers/", get_customers),
     path("create_customer/", create_customer),
     path("update_customer/<int:id>", update_customer),
     path("delete_customer/<int:id>", delete_customer),
     path("employees/", get_employees),
-    path("save_employee/", save_employee),
+    path("create_employee/", create_employee),
     path("update_employee/<int:id>", update_employee),
     path("delete_employee/<int:id>", delete_employee),
+    
+    path("get_booking/<int:id>", get_booking),
+    path("get_bookings/", get_booking),
+    path("order_car/", order_car),
+    path("cancel_order_car", cancel_order_car),
 ]

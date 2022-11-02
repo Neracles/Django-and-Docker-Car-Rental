@@ -9,15 +9,14 @@ from rest_framework.decorators import api_view
 def get_employees(request):
     employees = Employee.objects.all()
     serializer = EmployeeSerializer(employees, many=True)
-    print(serializer.data)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET', 'PUT'])
-def save_employee(request):
+def create_employee(request):
     serializer = EmployeeSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_201_CREATED)
 
 @api_view(['PUT'])
 def update_employee(request, id):
@@ -28,7 +27,7 @@ def update_employee(request, id):
     serializer = EmployeeSerializer(theEmployee, data=request.data)
     if serializer.is_valid():
         serializer.save()
-        return Response(serializer.data)
+        return Response(status=status.HTTP_200_OK)
     else:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -39,4 +38,4 @@ def delete_employee(request, id):
     except Employee.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)    
     theEmployee.delete()
-    return Response(status=status.HTTP_204_NO_CONTENT)
+    return Response(status=status.HTTP_200_OK)

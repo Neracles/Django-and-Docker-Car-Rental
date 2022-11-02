@@ -9,18 +9,16 @@ from rest_framework.decorators import api_view
 def get_customers(request):
     customers = Customer.objects.all()
     serializer = CustomerSerializer(customers, many=True)
-    print(serializer.data)
-    if serializer.is_valid():
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET','POST'])
 def create_customer(request):
     serializer = CustomerSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_201_CREATED)
     else:
-        return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT'])
 def update_customer(request, id):
@@ -31,7 +29,7 @@ def update_customer(request, id):
     serializer = CustomerSerializer(theCustomer, data=request.data)
     if serializer.is_valid():
         serializer.save()
-        return Response(serializer.data)
+        return Response(status=status.HTTP_200_OK)
     else:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 

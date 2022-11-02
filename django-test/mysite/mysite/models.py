@@ -15,8 +15,6 @@ class Customer(models.Model):
     name = models.CharField(max_length=50)
     age = models.IntegerField()
     address = models.CharField(max_length=100)
-    cars = models.ManyToManyField(Car)
-    order = models.IntegerField(default=0)
 
     def __str__(self): 
         return self.name
@@ -31,10 +29,8 @@ class Employee(models.Model):
         return self.name
 
 class Booking(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    car = models.ForeignKey(Car, on_delete=models.CASCADE)
-    booking_date = models.DateField(default = timezone.now)
-    return_date = models.DateField(default = timezone.now)
+    customer = models.IntegerField()
+    car = models.IntegerField()
     booking_status = models.CharField(max_length=50, default = "booked")
     
     def __str__(self):
