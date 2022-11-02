@@ -28,6 +28,7 @@ class Employee(models.Model):
 
     def __str__(self): 
         return self.name
+
 class Booking(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     car = models.ForeignKey(Car, on_delete=models.CASCADE)
