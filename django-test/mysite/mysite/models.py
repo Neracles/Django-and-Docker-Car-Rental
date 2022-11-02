@@ -16,6 +16,7 @@ class Customer(models.Model):
     age = models.IntegerField()
     address = models.CharField(max_length=100)
     cars = models.ManyToManyField(Car)
+    order = models.CharField(max_length=1000)
 
     def __str__(self): 
         return self.name
