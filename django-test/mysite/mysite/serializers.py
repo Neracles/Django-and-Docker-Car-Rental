@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import Car
 from .models import Employee
 from .models import Customer
+from .models import Booking
 
 class CarSerializer(serializers.ModelSerializer):
     class Meta:
@@ -17,3 +18,8 @@ class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
         fields = ['id','name', 'age', 'address', 'cars']
+        
+class BookingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Booking
+        fields = ['id', 'customer', 'car', 'booking_date', 'return_date', 'booking_status']
