@@ -3,8 +3,6 @@ from ..models import Car
 from ..models import Customer
 from ..models import Booking
 from rest_framework.response import Response
-from ..serializers import CarSerializer
-from ..serializers import CustomerSerializer
 from ..serializers import BookingSerializer
 from rest_framework import status
 from django.http import JsonResponse
@@ -55,6 +53,7 @@ def order_car(request):
                 message = {"message":"The selected car is not available or the customer has already booked a car."}
                 return Response(data=json.dumps(message), status=status.HTTP_400_BAD_REQUEST)
             else:
+                theCar.car_status = 'BOOKED'
                 theCar.save()
                 serializer.save()
                 return Response(status=status.HTTP_201_CREATED)
@@ -63,16 +62,87 @@ def order_car(request):
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-@api_view(['GET','PUT'])
+@api_view(['GET','POST'])
 def cancel_order_car(request):
-    try:
-        theCar = Car.objects.get(pk=carid)
-        theCustomer = Customer.objects.get(pk=custid)
-    except Car.DoesNotExist or Customer.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND) 
-    if theCustomer.order == carid:
-        serializer = CarSerializer(theCar, data=request.data)
-        serializer.update(theCar, {"car_status": "available"})
+    serializer = BookingSerializer(data=request.data)
+    if serializer.is_valid():
+        customer = serializer.validated_data.get('customer')
+        car = serializer.validated_data.get('car')
+        try:
+            theCar = Car.objects.get(pk=car)
+            theCustomer = Customer.objects.get(pk=customer)
+            bookingOnCar = Booking.objects.all().filter(car=theCar.id, customer=theCustomer.id)
+            
+            if bookingOnCar is not None and theCar is not None and theCustomer is not None:
+                # Save booking status as completed
+                bookingOnCar.update(booking_status='COMPLETED')
+                # Save car status as available
+                theCar.car_status = 'AVAILABLE'
+                theCar.save()
+                return Response(status=status.HTTP_200_OK)
+            else:
+                message = {"message":"No booking found for the given customer and car."}
+                return Response(data=json.dumps(message), status=status.HTTP_400_BAD_REQUEST)
+        except Car.DoesNotExist or Customer.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
     else:
-        return Response(status=status.HTTP_400_BAD_REQUEST)  
-    return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['GET','POST'])
+def rent_car(request):
+    serializer = BookingSerializer(data=request.data)
+    if serializer.is_valid():
+        customer = serializer.validated_data.get('customer')
+        car = serializer.validated_data.get('car')
+        try:
+            theCar = Car.objects.get(pk=car)
+            theCustomer = Customer.objects.get(pk=customer)
+            bookingOnCar = Booking.objects.all().filter(car=theCar.id, customer=theCustomer.id)
+            
+            if (bookingOnCar is not None and theCar is not None and 
+                theCustomer is not None):
+                # Save booking status as DELIVERED
+                bookingOnCar.update(booking_status='DELIVERED')
+                # Save car status as available
+                theCar.car_status = 'RENTED'
+                theCar.save()
+                return Response(status=status.HTTP_200_OK)
+            else:
+                message = {"message":"No booking found for the given customer and car."}
+                return Response(data=json.dumps(message), status=status.HTTP_400_BAD_REQUEST)
+        except Car.DoesNotExist or Customer.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['POST'])
+def return_car(request, new_car_status):
+    serializer = BookingSerializer(data=request.data)
+    if serializer.is_valid():
+        customer = serializer.validated_data.get('customer')
+        car = serializer.validated_data.get('car')
+        if new_car_status.capitalize() == 'DAMAGED':
+            new_booking_status = 'DAMAGED'
+        else:
+            new_booking_status = 'COMPLETED'
+            new_car_status = 'AVAILABLE'
+        try:
+            theCar = Car.objects.get(pk=car)
+            theCustomer = Customer.objects.get(pk=customer)
+            bookingOnCar = Booking.objects.all().filter(car=theCar.id, customer=theCustomer.id)
+            
+            if (bookingOnCar is not None and theCar is not None and 
+                theCustomer is not None):
+                # Save new booking statuS
+                bookingOnCar.update(booking_status=new_booking_status)
+                # Save nwe car status
+                theCar.car_status = new_car_status
+                theCar.save()
+                return Response(status=status.HTTP_200_OK)
+            else:
+                message = {"message":"No booking found for the given customer and car."}
+                return Response(data=json.dumps(message), status=status.HTTP_400_BAD_REQUEST)
+        except Car.DoesNotExist or Customer.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
