@@ -39,18 +39,21 @@ def order_car(request):
             theCustomer = Customer.objects.get(pk=customer)
             bookingsOnCar = Booking.objects.all().filter(car=theCar.id)
             bookingsOnCustomer = Booking.objects.all().filter(customer=theCustomer.id)
-            customerHasAlreadyBookedCar = False
-            carIsAlreadyBooked = False
+            customerHasAlreadyBookedCar = True
+            carIsAlreadyBooked = True
             if bookingsOnCustomer is not None:
                 for booking in bookingsOnCustomer:
-                    if booking.booking_status.capitalize() != 'COMPLETED':
-                        customerHasAlreadyBookedCar = True
+                    if booking.booking_status == "COMPLETED":
+                        customerHasAlreadyBookedCar = False
             if bookingsOnCar is not None:
                 for booking in bookingsOnCar:
-                    if booking.booking_status.capitalize() != 'COMPLETED':
-                        carIsAlreadyBooked = True
-            if customerHasAlreadyBookedCar or carIsAlreadyBooked:
-                message = {"message":"The selected car is not available or the customer has already booked a car."}
+                    if booking.booking_status == "COMPLETED":
+                        carIsAlreadyBooked = False
+            if customerHasAlreadyBookedCar:
+                message = {"message":"The customer has already booked a car."}
+                return Response(data=json.dumps(message), status=status.HTTP_400_BAD_REQUEST)
+            elif carIsAlreadyBooked:
+                message = {"message":"The selected car is already booked."}
                 return Response(data=json.dumps(message), status=status.HTTP_400_BAD_REQUEST)
             else:
                 theCar.car_status = 'BOOKED'
@@ -75,10 +78,11 @@ def cancel_order_car(request):
             
             if bookingOnCar is not None and theCar is not None and theCustomer is not None:
                 # Save booking status as completed
-                bookingOnCar.update(booking_status='COMPLETED')
+                #bookingOnCar.update(booking_status='COMPLETED')
                 # Save car status as available
                 theCar.car_status = 'AVAILABLE'
                 theCar.save()
+                bookingOnCar.delete()
                 return Response(status=status.HTTP_200_OK)
             else:
                 message = {"message":"No booking found for the given customer and car."}

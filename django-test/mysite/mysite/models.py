@@ -7,7 +7,7 @@ class Car(models.Model):
     carmodel = models.CharField(max_length=50)
     year = models.IntegerField()
     location = models.CharField(max_length=50)
-    car_status = models.CharField(max_length=50, default = "available")
+    car_status = models.CharField(max_length=50, default = "AVAILABLE")
     def __str__(self): 
         return self.make + ' ' + self.carmodel
     
@@ -31,7 +31,7 @@ class Employee(models.Model):
 class Booking(models.Model):
     customer = models.IntegerField()
     car = models.IntegerField()
-    booking_status = models.CharField(max_length=50, default = "booked")
+    booking_status = models.CharField(max_length=50, default = "BOOKED")
     
     def __str__(self):
         return str(self.customer) + "- " + str(self.car)
