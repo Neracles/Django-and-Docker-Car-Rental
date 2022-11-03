@@ -74,18 +74,18 @@ def cancel_order_car(request):
         try:
             theCar = Car.objects.get(pk=car)
             theCustomer = Customer.objects.get(pk=customer)
-            bookingOnCar = Booking.objects.all().filter(car=theCar.id, customer=theCustomer.id)
+            bookingOnCar = Booking.objects.all().filter(car=theCar.id, customer=theCustomer.id, booking_status='BOOKED').last()
             
             if bookingOnCar is not None and theCar is not None and theCustomer is not None:
                 # Save booking status as completed
-                #bookingOnCar.update(booking_status='COMPLETED')
+                bookingOnCar.booking_status = 'COMPLETED'
+                bookingOnCar.save()
                 # Save car status as available
                 theCar.car_status = 'AVAILABLE'
                 theCar.save()
-                bookingOnCar.delete()
                 return Response(status=status.HTTP_200_OK)
             else:
-                message = {"message":"No booking found for the given customer and car."}
+                message = {"message":"No booking with booking status 'BOOKED' found for the given customer and car."}
                 return Response(data=json.dumps(message), status=status.HTTP_400_BAD_REQUEST)
         except Car.DoesNotExist or Customer.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
@@ -101,16 +101,21 @@ def rent_car(request):
         try:
             theCar = Car.objects.get(pk=car)
             theCustomer = Customer.objects.get(pk=customer)
-            bookingOnCar = Booking.objects.all().filter(car=theCar.id, customer=theCustomer.id)
-            
+            bookingOnCar = Booking.objects.all().filter(car=theCar.id, customer=theCustomer.id, booking_status='BOOKED').last()
             if (bookingOnCar is not None and theCar is not None and 
                 theCustomer is not None):
-                # Save booking status as DELIVERED
-                bookingOnCar.update(booking_status='DELIVERED')
-                # Save car status as available
-                theCar.car_status = 'RENTED'
-                theCar.save()
-                return Response(status=status.HTTP_200_OK)
+                
+                if theCar.car_status.upper() != 'BOOKED':
+                    message = {"message":"A car can only be rented if its status is 'BOOKED'. The status for this car is" + theCar.car_status.upper() +"."}
+                    return Response(data=json.dumps(message), status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    # Save booking status as DELIVERED
+                    bookingOnCar.booking_status= 'DELIVERED'
+                    bookingOnCar.save()
+                    # Save car status as available
+                    theCar.car_status = 'RENTED'
+                    theCar.save()
+                    return Response(status=status.HTTP_200_OK)
             else:
                 message = {"message":"No booking found for the given customer and car."}
                 return Response(data=json.dumps(message), status=status.HTTP_400_BAD_REQUEST)
@@ -125,7 +130,7 @@ def return_car(request, new_car_status):
     if serializer.is_valid():
         customer = serializer.validated_data.get('customer')
         car = serializer.validated_data.get('car')
-        if new_car_status.capitalize() == 'DAMAGED':
+        if new_car_status.upper() == 'DAMAGED':
             new_booking_status = 'DAMAGED'
         else:
             new_booking_status = 'COMPLETED'
@@ -133,18 +138,19 @@ def return_car(request, new_car_status):
         try:
             theCar = Car.objects.get(pk=car)
             theCustomer = Customer.objects.get(pk=customer)
-            bookingOnCar = Booking.objects.all().filter(car=theCar.id, customer=theCustomer.id)
+            bookingOnCar = Booking.objects.all().filter(car=theCar.id, customer=theCustomer.id, booking_status='DELIVERED').last()
             
             if (bookingOnCar is not None and theCar is not None and 
                 theCustomer is not None):
                 # Save new booking statuS
-                bookingOnCar.update(booking_status=new_booking_status)
-                # Save nwe car status
+                bookingOnCar.booking_status = new_booking_status
+                bookingOnCar.save()
+                # Save new car status
                 theCar.car_status = new_car_status
                 theCar.save()
                 return Response(status=status.HTTP_200_OK)
             else:
-                message = {"message":"No booking found for the given customer and car."}
+                message = {"message":"No booking with the status 'DELIVERED' found for the given customer and car."}
                 return Response(data=json.dumps(message), status=status.HTTP_400_BAD_REQUEST)
         except Car.DoesNotExist or Customer.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
