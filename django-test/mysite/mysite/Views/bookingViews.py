@@ -39,16 +39,16 @@ def order_car(request):
             theCustomer = Customer.objects.get(pk=customer)
             bookingsOnCar = Booking.objects.all().filter(car=theCar.id)
             bookingsOnCustomer = Booking.objects.all().filter(customer=theCustomer.id)
-            customerHasAlreadyBookedCar = True
-            carIsAlreadyBooked = True
+            customerHasAlreadyBookedCar = False
+            carIsAlreadyBooked = False
             if bookingsOnCustomer is not None:
                 for booking in bookingsOnCustomer:
-                    if booking.booking_status == "COMPLETED":
-                        customerHasAlreadyBookedCar = False
+                    if booking.booking_status.upper() != "COMPLETED":
+                        customerHasAlreadyBookedCar = True
             if bookingsOnCar is not None:
                 for booking in bookingsOnCar:
-                    if booking.booking_status == "COMPLETED":
-                        carIsAlreadyBooked = False
+                    if booking.booking_status.upper() != "COMPLETED":
+                        carIsAlreadyBooked = True
             if customerHasAlreadyBookedCar:
                 message = {"message":"The customer has already booked a car."}
                 return Response(data=json.dumps(message), status=status.HTTP_400_BAD_REQUEST)
