@@ -9,3 +9,5 @@ pytz==2022.4
 sqlparse==0.4.3
 tzdata==2022.4
 virtualenv==20.16.5
+martor
+gunicorn
