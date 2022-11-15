@@ -23,7 +23,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
-          context: ....
+          context: ...
           file: django-test/mysite/Dockerfile
           push: true
           tags: "danielalvestad/mysite-dani"
