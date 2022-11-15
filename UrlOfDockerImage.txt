@@ -1,0 +1,5 @@
+Docker image can be pulled by running the following command:
+docker pull danielalvestad/mysite-dani:latest
+
+Here is the link to the Docker Hub repository:
+https://hub.docker.com/repository/docker/danielalvestad/mysite-dani
