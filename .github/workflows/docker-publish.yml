@@ -24,6 +24,6 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          file: ..../django-test/mysite/Dockerfile
+          file: django-test/mysite/Dockerfile
           push: true
           tags: "danielalvestad/mysite-dani"
